@@ -15,7 +15,7 @@ COPY . .
 
 # Expose the port on which your Node.js application will run
 
-ENV MYSQL_HOST="mysqll"
+ENV MYSQL_HOST="mysql"
 ENV MYSQL_USER="archit"
 ENV MYSQL_PASSWORD="Password1!"
 ENV MYSQL_DATABASE="employees_db"
