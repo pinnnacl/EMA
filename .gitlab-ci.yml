@@ -1,0 +1,67 @@
+stages:
+  - test
+  - deploy
+
+nginx-config-test:
+  stage: test
+  script:
+    - docker run --rm -v $PWD/nginx:/data/ --name check-nginx-conf -t -a stdout nginx:latest nginx -t -c /data/nginx.conf
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  tags:
+    - ema
+
+frontend-build-deploy-prod:
+  stage: deploy
+  script:
+    - echo "in frontend-deploy-prod job"
+    - rsync -avh frontend/ deployer@127.0.0.1:~/ema/frontend/
+    - >
+      ssh deployer@127.0.0.1 "
+      . ~/.profile &&
+      . ~/.bashrc &&
+      . ~/.nvm/nvm.sh &&
+      node -v &&
+      cd ema/frontend &&
+      npm install &&
+      pm2 restart app.js"
+  tags:
+    - ema
+  rules:
+    - if: $CI_COMMIT_BRANCH == "production"
+      changes:
+        - frontend/**/*
+
+backend-build-deploy-prod:
+  stage: deploy
+  script:
+    - echo "in backend-deploy-prod job"
+    - rsync -avh backend/ deployer@127.0.0.1:~/ema/backend/
+    - >
+      ssh deployer@127.0.0.1 "
+      . ~/.profile &&
+      . ~/.bashrc &&
+      . ~/.nvm/nvm.sh &&
+      node -v &&
+      cd ema/backend/ &&
+      npm install &&
+      pm2 restart app.js"
+  tags:
+    - ema
+  rules:
+    - if: $CI_COMMIT_BRANCH == "production"
+      changes:
+        - backend/**/*
+
+deploy-nginx-conf:
+  stage: deploy
+  script:
+    - echo "in deploy-nginx-conf script"
+    - rsync -avh nginx/ deployer@127.0.0.1:/home/deployer/ema/nginx
+    - ssh deployer@127.0.0.1 "bash /home/deployer/ema/nginx/restart_nginx.sh"
+  tags:
+    - ema
+  rules:
+    - if: $CI_COMMIT_BRANCH == "production"
+      changes:
+        - nginx/**/*
