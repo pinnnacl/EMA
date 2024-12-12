@@ -1,3 +1,5 @@
+require('newrelic');
+
 const express = require('express')
 const appRoutes = require('./routes/appRoutes')
 const bodyParser = require('body-parser');

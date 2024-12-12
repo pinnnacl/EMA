@@ -5,17 +5,20 @@ FROM node:alpine
 WORKDIR /app
 
 # Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+COPY package*.json /app/
 
 # Install dependencies
 RUN npm install
 
 # Copy the rest of the application code to the working directory
-COPY . .
+COPY . /app
 
 # Expose the port on which your Node.js application will run
 
-ENV MYSQL_HOST="mysqll"
+ENV NEW_RELIC_NO_CONFIG_FILE=true
+ENV NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=true
+ENV NEW_RELIC_LOG=stdout
+ENV MYSQL_HOST="ip-172-31-93-86"
 ENV MYSQL_USER="archit"
 ENV MYSQL_PASSWORD="Password1!"
 ENV MYSQL_DATABASE="employees_db"

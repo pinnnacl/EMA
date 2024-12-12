@@ -1,7 +1,7 @@
 const express = require('express')
 const fetch = require('node-fetch')
 const router = express.Router()
-const host= 'http://backend:8000'
+const host= 'http://ip-172-31-93-86:8000'
 router.get('/', (req, res)=>{
     res.render('index')
 })
