@@ -1,4 +1,4 @@
-# EMA
+ # EMA
 
 ## k8 Debugging Method
 
@@ -9,7 +9,7 @@ curl http://<cluster-name>:port/path
 
 check for the curl response
 
-##challeges
+## Challeges
 
 When deploying in kubernetes environment change the DB host name or hostIP in backend application Dockerfile as well as in /backend/db/conn.js
 
