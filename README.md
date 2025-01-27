@@ -14,3 +14,5 @@ check for the curl response
 When deploying in kubernetes environment change the DB host name or hostIP in backend application Dockerfile as well as in /backend/db/conn.js
 
 Also the backend URL is configured in frontend route.js which need to be edited
+
+Also there are some unwanted newrelic configuration, find it and remove it.
