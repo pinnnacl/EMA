@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-deploy
+  template:
+    metadata:
+      labels: 
+        app: backend-deploy
+    spec:
+      containers:
+        - name: backend
+          image: 381492291062.dkr.ecr.us-east-1.amazonaws.com/eks_tasks/backend:latest
+          ports:
+            - containerPort: 8000
