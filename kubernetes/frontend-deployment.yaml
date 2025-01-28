@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  labels:
+    app: frontend-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend-deploy
+  template:
+    metadata:
+      labels:
+        app: frontend-deploy  # Add labels to the pod template as well
+    spec:
+      containers:
+        - name: frontend
+          image: 381492291062.dkr.ecr.us-east-1.amazonaws.com/eks-tasks:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: BACKEND_URL
+              value: "http://backend-service:8000"
