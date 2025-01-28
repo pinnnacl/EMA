@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: backend
-          image: 381492291062.dkr.ecr.us-east-1.amazonaws.com/eks_tasks/backend:latest
+          image: 381492291062.dkr.ecr.us-east-1.amazonaws.com/jenkins/j_back
           ports:
             - containerPort: 8000
