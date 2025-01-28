@@ -1,0 +1,77 @@
+# Persistent Volume Definition
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 1Gi  # Must match the PVC request
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: standard  # Matches the PVC
+  hostPath:
+    path: /mnt/mysql-pv
+
+---
+
+# StatefulSet Definition
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysqldb
+spec:
+  serviceName: "mysqldb"
+  replicas: 1  # Number of replicas
+  selector:
+    matchLabels:
+      app: mysqldb
+  template:
+    metadata:
+      labels:
+        app: mysqldb
+    spec:
+      containers:
+      - name: mysql
+        image: "381492291062.dkr.ecr.us-east-1.amazonaws.com/eks_tasks/database" 
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "rootpassword"
+        - name: MYSQL_DATABASE
+          value: "employees_db"
+        - name: MYSQL_USER
+          value: "archit"
+        - name: MYSQL_PASSWORD
+          value: "Password1!"
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-persistent-storage
+    spec:
+      accessModes: 
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi  # Match the PV capacity
+      storageClassName: standard  # Matches the PV
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-service
+spec:
+  type: ClusterIP  # Or NodePort if you want external access to DB
+  selector:
+    app: mysqldb
+  ports:
+    - protocol: TCP
+      port: 3306  # Port the database listens on
+      targetPort: 3306
