@@ -15,10 +15,7 @@ COPY . /app
 
 # Expose the port on which your Node.js application will run
 
-ENV NEW_RELIC_NO_CONFIG_FILE=true
-ENV NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=true
-ENV NEW_RELIC_LOG=stdout
-ENV MYSQL_HOST="ip-172-31-93-86"
+ENV MYSQL_HOST="mydb"
 ENV MYSQL_USER="archit"
 ENV MYSQL_PASSWORD="Password1!"
 ENV MYSQL_DATABASE="employees_db"

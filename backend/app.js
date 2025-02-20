@@ -1,4 +1,3 @@
-require('newrelic');
 
 const express = require('express')
 const appRoutes = require('./routes/appRoutes')
