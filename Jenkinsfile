@@ -103,6 +103,7 @@ pipeline {
                     sh """
                     docker stop frontend backend mydb || true
                     docker rm frontend backend mydb || true
+                    docker network create myapp
                     docker run -d --name mydb --network myapp $DB_IMAGE
                     docker run -d --name backend --network myapp $BACKEND_IMAGE
                     docker run -d --name frontend --network myapp $FRONTEND_IMAGE
