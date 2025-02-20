@@ -152,4 +152,4 @@ sudo certbot renew --dry-run
 dig abc2.solutions +short
 ```
 
-
+![](https://github.com/git-hub-sachin/EMA/blob/simple-ema/images/Screenshot%20from%202025-02-20%2016-53-29.png)
