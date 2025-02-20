@@ -85,6 +85,7 @@ pipeline {
                         }
                     }
                 }
+	    }
         stage('Run Docker Containers') {
             steps {
                 script {
@@ -97,7 +98,6 @@ pipeline {
                     """
                 }
             }
-
         }
     }
 }
