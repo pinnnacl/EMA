@@ -50,11 +50,11 @@ pipeline {
                     steps {
                         script {
                             sh """
-			                cd frontend/
+                            cd frontend/
                             docker build -t ema-frontend .
                             docker tag ema-frontend:latest $FRONTEND_IMAGE
                             docker push $FRONTEND_IMAGE
-			                cd ..
+                            cd ..
                             """
                         }
                     }
@@ -63,11 +63,11 @@ pipeline {
                     steps {
                         script {
                             sh """
-			                cd backend/
+                            cd backend/
                             docker build -t ema-backend .
                             docker tag ema-backend:latest $BACKEND_IMAGE
                             docker push $BACKEND_IMAGE
-		     	            cd ..
+                            cd ..
                             """
                         }
                     }
@@ -76,16 +76,18 @@ pipeline {
                     steps {
                         script {
                             sh """
-			                cd mysql/
+                            cd mysql/
                             docker build -t ema-db .
                             docker tag ema-db:latest $DB_IMAGE
                             docker push $DB_IMAGE
-			                cd ..
+                            cd ..
                             """
                         }
                     }
                 }
-	    }
+            }  
+        }
+
         stage('Run Docker Containers') {
             steps {
                 script {
@@ -99,5 +101,7 @@ pipeline {
                 }
             }
         }
-    }
-}
+
+    }  
+
+} 
