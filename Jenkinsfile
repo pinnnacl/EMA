@@ -104,10 +104,10 @@ pipeline {
                     docker stop frontend backend mydb || true
                     docker rm frontend backend mydb || true
                     docker network create myapp || true
-                    docker run -d --name mydb --network myapp $DB_IMAGE
+                    docker run -d --name mydb -p 3306:3306 --network myapp $DB_IMAGE
                     sleep 20
-                    docker run -d --name backend --network myapp $BACKEND_IMAGE
-                    docker run -d --name frontend --network myapp $FRONTEND_IMAGE
+                    docker run -d --name backend -p 8000:8000 --network myapp $BACKEND_IMAGE
+                    docker run -d --name frontend -p 80:5000 --network myapp $FRONTEND_IMAGE
                     """
                 }
             }
