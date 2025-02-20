@@ -34,12 +34,21 @@ pipeline {
             }
         }
 
-        stage('Delete Old Images from ECR') {
+        stage('Delete Old Images from ECR and Machine') {
             steps {
                 script {
+                    // Delete images from ECR
                     sh "aws ecr batch-delete-image --repository-name ema-frontend --image-ids imageTag=latest || true"
                     sh "aws ecr batch-delete-image --repository-name ema-backend --image-ids imageTag=latest || true"
                     sh "aws ecr batch-delete-image --repository-name ema-db --image-ids imageTag=latest || true"
+
+                    // Delete images from the local machine
+                    sh "docker rmi -f $FRONTEND_IMAGE || true"
+                    sh "docker rmi -f $BACKEND_IMAGE || true"
+                    sh "docker rmi -f $DB_IMAGE || true"
+
+                    // Clean up dangling images
+                    sh "docker image prune -f || true"
                 }
             }
         }
@@ -85,7 +94,7 @@ pipeline {
                         }
                     }
                 }
-            }  
+            }
         }
 
         stage('Run Docker Containers') {
@@ -94,14 +103,14 @@ pipeline {
                     sh """
                     docker stop frontend backend mydb || true
                     docker rm frontend backend mydb || true
-                    docker run -d --name mydb -p 3306:3306 $DB_IMAGE
-                    docker run -d --name backend -p 8080:8080 --link mydb $BACKEND_IMAGE
-                    docker run -d --name frontend -p 80:80 --link backend $FRONTEND_IMAGE
+                    docker run -d --name mydb $DB_IMAGE
+                    docker run -d --name backend $BACKEND_IMAGE
+                    docker run -d --name frontend $FRONTEND_IMAGE
                     """
                 }
             }
         }
 
-    }  
+    }
 
-} 
+}
